@@ -11,6 +11,12 @@ I wrote this because I wanted an easy way to use [Overcast](https://overcast.fm/
 * Generates valid RSS and Atom feeds for maximum compatibility
 * Automatically extracts tag information when `mediainfo` is installed
 
+## Caffeinating
+
+When you find something helpful in here, you could buy me a coffee. I spend a lot of time and effort on curating this list. Keeping me properly caffeinated accelerates things. And it would really make my day. Kindness of strangers and all that. If you can't or won't, no hard feelings. It's available completely free for a reason. Still, it would be awesome.
+
+Patreon: https://www.patreon.com/herrbischoff
+
 ## Installation and Usage
 
 * Upload `index.php` file to a folder on a web server running PHP 5.4 or higher.
