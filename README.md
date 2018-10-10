@@ -103,9 +103,3 @@ Here's what an audiobook may look like while playing in Overcast. Nice, isn't it
 ### 0.1.0
 
 * Initial release.
-
-## Send a Tip my Way
-
-In case you feel particularly generous today, you could buy me a coffee. That would really make my day. Kindness of strangers and all that. If you can't or won't, no hard feelings.
-
-Patreon: https://www.patreon.com/herrbischoff
