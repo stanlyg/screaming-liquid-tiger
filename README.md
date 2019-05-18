@@ -15,7 +15,7 @@ I wrote this because I wanted an easy way to use [Overcast](https://overcast.fm/
 
 When you find this helpful, you could buy me a coffee. Keeping me properly caffeinated accelerates things. And it would really make my day. Kindness of strangers and all that. If you can't or won't, no hard feelings. It's available completely free for a reason. Still, it would be awesome.
 
-Patreon: https://www.patreon.com/herrbischoff
+Patreon: <https://www.patreon.com/herrbischoff>
 
 ## Installation and Usage
 
@@ -29,8 +29,8 @@ For easier upgrades, you can now use a `config.php` file (included) to set your 
 
 If you have a rather large collection of files, you may want to set up a cronjob running the script, redirecting its output to an XML file like so:
 
-```
-*/15 * * * * php index.php > podcast.xml
+```cron
+*/15 * * * * curl http://example.com/folder/index.php > /usr/local/www/podcast.xml
 ```
 
 ## How to Create Your Own Audiobooks
