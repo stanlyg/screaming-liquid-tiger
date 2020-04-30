@@ -48,10 +48,21 @@ if (!file_exists('./config.php')) :
      * image: main image for feed (optional)
      */
     $conf = array(
-        'description' => 'Personal Audiobook Feed',
-        'link'        => 'http://www.example.com',
-        'title'       => 'Audiobook Podcast',
-        'image'       => 'cast.jpg'
+        'title'       => 'Podcast Title',
+        'description' => 'Long description of Podcast',
+        'image'       => 'cover.jpg',
+        'language'    => 'en',#iso639, 2 character codes
+        'category'    => 'Fiction',
+        'subcategory' => '',
+        'explicit'    => '', #'', 'true', 'false'
+        'author'      => 'Screaming Liquid Tiger',
+        'link'        => 'http://example.com/audiobook',
+        'ownername'   => 'Screaming Liquid Tiger Network.', #Contact info for itunes
+        'ownermail'   => 'screamingliquidtiger@example.com',
+        'type'        => 'serial', #'','serial','episodic'
+        'copyright'   => 'Text copyright © 2000 Tiger, Audio Copyright © 2000 Lion.', 
+        'block'       => 'yes', #'', 'yes' to hide from itunes
+        'complete'    => '' #'', 'yes'
     );
 
     /**
