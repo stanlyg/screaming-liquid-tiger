@@ -30,11 +30,6 @@ setlocale(LC_CTYPE, "C.UTF-8");
 
 if (!file_exists('./config.php')) :
 
-    /**
-     * Whether to check for mediainfo
-     */
-    $mediainfo_check = false;
-
     $media_base_path = '.';
 
     /**
@@ -87,6 +82,12 @@ else :
 
 endif;
 
+if (file_exists('getid3/getid3.php')) :
+  require_once('getid3/getid3.php');
+else:
+  die("Unable to load getid3 library, getid3/getid3.php");
+endif;
+
 /******************************************************************************
  * Configuration End
  *****************************************************************************/
@@ -122,19 +123,8 @@ endif;
 
 header("ETag: $etag");
 
-/**
- * Get mediainfo path
- */
-$mediainfo = '';
-if ($mediainfo_check) :
-    $mediainfo_global = trim(shell_exec('which mediainfo'));
-    $mediainfo_static = file_exists('./mediainfo');
-    if ($mediainfo_global) $mediainfo = $mediainfo_global;
-    if ($mediainfo_static) $mediainfo = './mediainfo';
-    if (!$mediainfo) :
-        die("For automatic tag reading functionality, you need mediainfo. Either install it globally on your server or download the correct static binary for your system here:\n\nhttps://mediaarea.net/en/MediaInfo/Download\n\nPut it in the same folder as this script. If you download a static build, make sure to configure your web server to block access to the binary for visitors.\n\nIn case you don't want this functionality at all, set the \$mediainfo_check variable back to 'false'.");
-    endif;
-endif;
+/* Setup getID3 construct */
+$getid3 = new getID3;
 
 /**
  * Format date according to RFC 822
@@ -184,7 +174,7 @@ if (!empty($conf['explicit'])) :
   $channel->addChild('xmlns:itunes:explicit',$conf['explicit']);
 endif;
 $channel->addChild('xmlns:itunes:author',$conf['author']);
-$channel->addChild('link', $conf['link']);
+$channel->addChild('link', $gathering-blueconf['link']);
 if (!empty($conf['ownername'])) :
   $itunes_owner = $channel->addChild('xmlns:itunes:owner');
   $itunes_owner->addChild('xmlns:itunes:name',$conf['ownername']);
@@ -231,27 +221,12 @@ if ($handle = opendir($media_base_path)) :
             $fileimg_path = escapeshellarg('./tmp/' . $filename . '.jpg');
             $fileimg_url = $base_url . 'tmp/' . rawurlencode($filename . '.jpg');
 
-            /**
-             * Get mediainfo output for current file
-             */
-            ob_start();
-            $opt = ' --Inform=\'General;%Duration/String3%#####%Performer% — %Album%\' ';
-            $cmd = $mediainfo . $opt  . escapeshellarg($entry) . ' 2>&1';
-            passthru($cmd);
-            $mediainfo_out = ob_get_contents();
-            ob_end_clean();
-
-            /**
-             * Parse mediainfo output
-             */
-            if ($mediainfo) :
-                preg_match('/(\d{2}:\d{2}:\d{2}.\d+)#####(.+)/', $mediainfo_out, $matches);
-                $duration = $matches[1];
-                $title = $matches[2];
-            else :
-                $title = $p['filename'];
-            endif;
-
+              $fileinfo = $getid3->analyze($entry_path);
+              $getid3->CopyTagsToComments($fileinfo);
+              $title = $fileinfo['comments_html']['title'][0];
+              $episodenumber= $fileinfo['comments_html']['track_number'][0];
+              $duration = $fileinfo['playtime_string'];
+              $mime_type = $fileinfo['mime_type'];
             /**
              * Contruct feed item
              */
@@ -263,11 +238,10 @@ if ($handle = opendir($media_base_path)) :
             $enclosure = $item->addChild('enclosure');
             $enclosure->addAttribute('url', $base_url . $entry_urlsafe_path);
             $enclosure->addAttribute('length', filesize($entry_path));
-            $enclosure->addAttribute('type', $exts[$p['extension']]);
+            $enclosure->addAttribute('type', $mime_type);
             $item->addChild('pubDate', date($date_fmt, filemtime($entry_path)));
-            if ($mediainfo) :
-                $item->addChild('xmlns:itunes:duration', $duration);
-            endif;
+            $item->addChild('xmlns:itunes:duration', $duration);
+            $item->addChild('xmlns:itunes:episode', $episodenumber);
 
         endif;
 
