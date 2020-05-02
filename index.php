@@ -174,7 +174,7 @@ if (!empty($conf['explicit'])) :
   $channel->addChild('xmlns:itunes:explicit',$conf['explicit']);
 endif;
 $channel->addChild('xmlns:itunes:author',$conf['author']);
-$channel->addChild('link', $gathering-blueconf['link']);
+$channel->addChild('link', $conf['link']);
 if (!empty($conf['ownername'])) :
   $itunes_owner = $channel->addChild('xmlns:itunes:owner');
   $itunes_owner->addChild('xmlns:itunes:name',$conf['ownername']);
