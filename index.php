@@ -57,7 +57,8 @@ if (!file_exists('./config.php')) :
         'type'        => 'serial', #'','serial','episodic'
         'copyright'   => 'Text copyright © 2000 Tiger, Audio Copyright © 2000 Lion.', 
         'block'       => 'yes', #'', 'yes' to hide from itunes
-        'complete'    => '' #'', 'yes'
+        'complete'    => '', #'', 'yes'
+        'base_url'    => '' # Base URL for audio files, automatically sorted out if blank
     );
 
     /**
@@ -132,14 +133,13 @@ $getid3 = new getID3;
 $date_fmt = 'D, d M Y H:i:s T';
 
 /**
- * Check for HTTPS
- */
-$prot = (isset($_SERVER['HTTPS']) != "on") ? 'http://' : 'https://';
-
-/**
  * Determine base URL
  */
-$base_url = str_replace("index.php", "", $prot . $_SERVER["HTTP_HOST"] . $_SERVER["PHP_SELF"]);
+if (empty($conf['base_url'])) :
+  $base_url = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . dirname($_SERVER['SCRIPT_NAME']).'/';
+else :
+  $base_url = $conf['base_url'];
+endif;
 
 /**
  * Set feed image if present
