@@ -216,10 +216,6 @@ if ($handle = opendir($media_base_path)) :
          * Make sure file matches extensions from array
          */
         if (array_key_exists(pathinfo($entry_path, PATHINFO_EXTENSION), $exts) && !preg_match('/^\./', $entry)) :
-            $p = pathinfo($entry_path);
-            $filename = $p['filename'];
-            $fileimg_path = escapeshellarg('./tmp/' . $filename . '.jpg');
-            $fileimg_url = $base_url . 'tmp/' . rawurlencode($filename . '.jpg');
 
               $fileinfo = $getid3->analyze($entry_path);
               $getid3->CopyTagsToComments($fileinfo);
