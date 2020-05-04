@@ -216,20 +216,22 @@ if ($handle = opendir($media_base_path)) :
          * Make sure file matches extensions from array
          */
         if (array_key_exists(pathinfo($entry_path, PATHINFO_EXTENSION), $exts) && !preg_match('/^\./', $entry)) :
-
-              $fileinfo = $getid3->analyze($entry_path);
-              $getid3->CopyTagsToComments($fileinfo);
-              $title = $fileinfo['comments_html']['title'][0];
-              $episodenumber= $fileinfo['comments_html']['track_number'][0];
-              $duration = $fileinfo['playtime_string'];
-              $mime_type = $fileinfo['mime_type'];
+            /**
+              *  Retrieve tags from file 
+              */
+            $fileinfo = $getid3->analyze($entry_path);
+            $getid3->CopyTagsToComments($fileinfo);
+            $title = $fileinfo['comments_html']['title'][0];
+            $episodenumber= $fileinfo['comments_html']['track_number'][0];
+            $duration = $fileinfo['playtime_string'];
+            $mime_type = $fileinfo['mime_type'];
             /**
              * Contruct feed item
              */
             $entry_urlsafe_path = implode("/", array_map("rawurlencode", explode("/", $entry_path)));
             $item = $channel->addChild('item');
             $item->addChild('title', $title);
-            $guid = $item->addChild('guid', $base_url . $entry_urlsafe_path);
+            $guid = $item->addChild('guid', hash_file("sha256",$entry_path));
             $guid->addAttribute('isPermalink', 'false');
             $enclosure = $item->addChild('enclosure');
             $enclosure->addAttribute('url', $base_url . $entry_urlsafe_path);
