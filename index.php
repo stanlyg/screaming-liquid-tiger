@@ -225,6 +225,8 @@ if ($handle = opendir($media_base_path)) :
             $episodenumber= $fileinfo['comments_html']['track_number'][0];
             $duration = $fileinfo['playtime_string'];
             $mime_type = $fileinfo['mime_type'];
+            $description = $fileinfo['comments_html']['comment'][0];
+            $season = $fileinfo['comments_html']['part_of_a_set'][0];
             /**
              * Contruct feed item
              */
@@ -238,6 +240,12 @@ if ($handle = opendir($media_base_path)) :
             $enclosure->addAttribute('length', filesize($entry_path));
             $enclosure->addAttribute('type', $mime_type);
             $item->addChild('pubDate', date($date_fmt, filemtime($entry_path)));
+            if (!empty($description)): 
+                $item->addChild('description', $description);
+            endif;
+            if (!empty($season)):
+                $item->addChild('xmlns:itunes:season', $season);
+            endif;
             $item->addChild('xmlns:itunes:duration', $duration);
             $item->addChild('xmlns:itunes:episode', $episodenumber);
 
