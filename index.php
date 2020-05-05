@@ -202,18 +202,14 @@ $atomlink->addAttribute('type', 'application/rss+xml');
  * Get sorted list of files in $media_base_path
  */
 
-$files = scandir($media_base_path,SCANDIR_SORT_ASCENDING);
-
+$extglob = '.{'.implode(',',$ext).'}';
+$files = glob($media_base_path.'/*'.$extglob,GLOB_BRACE);
 foreach ($files as $entry_path):
 
         if ($media_base_path != ".") :
             $entry_path = $media_base_path . '/' . $entry_path;
         endif;
 
-        /**
-         * Make sure file matches extensions from array
-         */
-        if (array_key_exists(pathinfo($entry_path, PATHINFO_EXTENSION), $exts) && !preg_match('/^\./', $entry)) :
             /**
               *  Retrieve tags from file 
               */
@@ -247,7 +243,6 @@ foreach ($files as $entry_path):
             $item->addChild('xmlns:itunes:duration', $duration);
             $item->addChild('xmlns:itunes:episode', $episodenumber);
 
-        endif;
 endforeach;
 
 /**
