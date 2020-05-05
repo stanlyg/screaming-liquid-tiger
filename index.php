@@ -199,17 +199,15 @@ $atomlink->addAttribute('rel', 'self');
 $atomlink->addAttribute('type', 'application/rss+xml');
 
 /**
- * Open file handler for current directory
+ * Get sorted list of files in $media_base_path
  */
-if ($handle = opendir($media_base_path)) :
 
-    /**
-     * Start item generation loop
-     */
-    while (false !== ($entry = readdir($handle))) :
-        $entry_path = $entry;
+$files = scandir($media_base_path,SCANDIR_SORT_ASCENDING);
+
+foreach ($files as $entry_path):
+
         if ($media_base_path != ".") :
-            $entry_path = $media_base_path . '/' . $entry;
+            $entry_path = $media_base_path . '/' . $entry_path;
         endif;
 
         /**
@@ -250,18 +248,7 @@ if ($handle = opendir($media_base_path)) :
             $item->addChild('xmlns:itunes:episode', $episodenumber);
 
         endif;
-
-    /**
-     * End item generation loop
-     */
-    endwhile;
-
-endif;
-
-/**
- * Close file handler
- */
-closedir($handle);
+endforeach;
 
 /**
  * Output feed
