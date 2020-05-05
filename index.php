@@ -204,11 +204,8 @@ $atomlink->addAttribute('type', 'application/rss+xml');
 
 $extglob = '.{'.implode(',',$ext).'}';
 $files = glob($media_base_path.'/*'.$extglob,GLOB_BRACE);
-foreach ($files as $entry_path):
 
-        if ($media_base_path != ".") :
-            $entry_path = $media_base_path . '/' . $entry_path;
-        endif;
+foreach ($files as $entry_path):
 
             /**
               *  Retrieve tags from file 
