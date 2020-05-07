@@ -103,7 +103,11 @@ header('Content-type: application/rss+xml; charset=utf-8');
  */
 $extglob = '.{'.implode(',',$ext).'}';
 
-$files = glob($media_base_path.'/*'.$extglob,GLOB_BRACE);
+if ($media_base_path === "."):
+  $files = glob('*'.$extglob,GLOB_BRACE);
+else:
+  $files = glob($media_base_path.'/*'.$extglob,GLOB_BRACE);
+endif;
 
 $etag_hash = hash_init("sha256");
 foreach ($files as $entry_path):
@@ -198,7 +202,6 @@ $atomlink->addAttribute('type', 'application/rss+xml');
  */
 
 foreach ($files as $entry_path):
-            $entry_path = ltrim($entry_path, "./");
             /**
               *  Retrieve tags from file 
               */
