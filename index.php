@@ -198,7 +198,7 @@ $atomlink->addAttribute('type', 'application/rss+xml');
  */
 
 foreach ($files as $entry_path):
-
+            $entry_path = ltrim($entry_path, "./");
             /**
               *  Retrieve tags from file 
               */
