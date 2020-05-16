@@ -219,7 +219,7 @@ foreach ($files as $entry_path):
             $entry_urlsafe_path = implode("/", array_map("rawurlencode", explode("/", $entry_path)));
             $item = $channel->addChild('item');
             $item->addChild('title', $title);
-            $guid = $item->addChild('guid', hash_file("sha256",$entry_path));
+            $guid = $item->addChild('guid', hash_file("crc32b",$entry_path));
             $guid->addAttribute('isPermalink', 'false');
             $enclosure = $item->addChild('enclosure');
             $enclosure->addAttribute('url', $base_url . $entry_urlsafe_path);
